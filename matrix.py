@@ -5,3 +5,6 @@ class Matrix:
         self.array = array
         self.n = len(array)
         self.m = len(array[0])
+
+    def __repr__(self):
+        return '\n'.join([' '.join(map(str, x)) for x in self.array])
