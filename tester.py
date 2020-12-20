@@ -47,8 +47,7 @@ class Tester:
                 return -1, -1
             time_naive += result_naive[1]
             time_cache_oblivious += result_cache_oblivious[1]
-        print(f'Tests passed successfully.\nNaive solution average time: {round(time_naive / self.tests_number, 3)} ms.'
-              f'\nCache oblivious solution average time: {round(time_cache_oblivious / self.tests_number, 3)} ms.')
+        print(round(time_naive / self.tests_number, 3), round(time_cache_oblivious / self.tests_number, 3))
 
 
 if __name__ == '__main__':
