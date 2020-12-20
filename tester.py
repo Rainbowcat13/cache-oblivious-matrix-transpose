@@ -1,5 +1,6 @@
 import random
 import sys
+import time
 
 from naive_matrix import NaiveMatrix
 from cache_oblivious_matrix import CacheObliviousMatrix
@@ -17,6 +18,14 @@ def run_cache_oblivious(test_matrix):
     return str(com)
 
 
+def time_measure(function, data):
+    def wrapper():
+        start_time = time.time()
+        res = function(data)
+        return res, time.time() - start_time
+    return wrapper
+
+
 class Tester:
     def __init__(self, tests_number, matrix_size, max_value):
         self.tests_number = tests_number
@@ -27,14 +36,18 @@ class Tester:
         return [[random.randint(0, self.max_value)] * self.matrix_size[1] for i in range(self.matrix_size[0])]
 
     def run(self):
+        time_naive, time_cache_oblivious = 0, 0
         for i in range(self.tests_number):
             test_matrix = self.generate_test()
-            result_naive = run_naive(test_matrix)
-            result_cache_oblivious = run_cache_oblivious(test_matrix)
-            if result_naive != result_cache_oblivious:
+            result_naive = time_measure(run_naive, test_matrix)()
+            result_cache_oblivious = time_measure(run_cache_oblivious, test_matrix)()
+            if result_naive[0] != result_cache_oblivious[0]:
                 print('Error! Wrong result!')
-                return
-        print('Tests passed successfully')
+                return -1, -1
+            time_naive += result_naive[1]
+            time_cache_oblivious += result_cache_oblivious[1]
+        print(f'Tests passed successfully.\nNaive solution average time: {round(time_naive / self.tests_number, 3)} ms.'
+              f'\nCache oblivious solution average time: {round(time_cache_oblivious / self.tests_number, 3)} ms.')
 
 
 if __name__ == '__main__':
