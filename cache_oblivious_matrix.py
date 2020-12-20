@@ -19,8 +19,3 @@ class CacheObliviousMatrix(Matrix):
             hhalf = h // 2
             self.transpose_piece(i, j, w, hhalf)
             self.transpose_piece(i + hhalf, j, w, h - hhalf)
-
-
-a = CacheObliviousMatrix([[int(x) for x in input().split()] for i in range(int(input()))])
-a.transpose()
-print(a)
