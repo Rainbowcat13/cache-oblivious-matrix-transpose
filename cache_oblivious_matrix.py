@@ -3,25 +3,22 @@ from matrix import Matrix
 
 class CacheObliviousMatrix(Matrix):
     def transpose(self):
+        self.new_matrix = [[-1] * self.m for i in range(self.n)]
         self.transpose_piece(0, 0, self.n, self.m)
+        self.array = self.new_matrix
 
     def transpose_piece(self, i, j, w, h):
         if w == 1 and h == 1:
+            self.new_matrix[j][i] = self.array[i][j]
             return
-        if w > h:
-            self.transpose_piece(i, j, w // 2 + w % 2, h)
-            self.transpose_piece(i + w // 2, j, w // 2, h)
-            for x in range(i, i + w // 2):
-                for y in range(j, j + h):
-                    self.array[x][y], self.array[x + w // 2 + w % 2][y] = \
-                        self.array[x + w // 2 + w % 2][y], self.array[x][y]
+        if w >= h:
+            whalf = w // 2
+            self.transpose_piece(i, j, whalf, h)
+            self.transpose_piece(i, j + whalf, w - whalf, h)
         else:
-            self.transpose_piece(i, j, w, h // 2 + h % 2)
-            self.transpose_piece(i, j + h // 2, w, h // 2)
-            for x in range(i, i + w):
-                for y in range(j, j + h // 2):
-                    self.array[x][y], self.array[x][y + h // 2 + h % 2] = \
-                        self.array[x][y + h // 2 + h % 2], self.array[x][y]
+            hhalf = h // 2
+            self.transpose_piece(i, j, w, hhalf)
+            self.transpose_piece(i + hhalf, j, w, h - hhalf)
 
 
 a = CacheObliviousMatrix([[int(x) for x in input().split()] for i in range(int(input()))])
