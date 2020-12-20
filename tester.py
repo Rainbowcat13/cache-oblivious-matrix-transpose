@@ -1,6 +1,6 @@
 import random
 import sys
-import time
+from time import perf_counter
 
 from naive_matrix import NaiveMatrix
 from cache_oblivious_matrix import CacheObliviousMatrix
@@ -20,9 +20,9 @@ def run_cache_oblivious(test_matrix):
 
 def time_measure(function, data):
     def wrapper():
-        start_time = time.time()
+        start_time = perf_counter()
         res = function(data)
-        return res, time.time() - start_time
+        return res, (perf_counter() - start_time) * 1000
     return wrapper
 
 
@@ -33,7 +33,8 @@ class Tester:
         self.max_value = max_value
 
     def generate_test(self):
-        return [[random.randint(0, self.max_value)] * self.matrix_size[1] for i in range(self.matrix_size[0])]
+        return [[random.randint(0, self.max_value) for j in range(self.matrix_size[1])]
+                for i in range(self.matrix_size[0])]
 
     def run(self):
         time_naive, time_cache_oblivious = 0, 0

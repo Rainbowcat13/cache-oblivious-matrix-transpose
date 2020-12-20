@@ -8,8 +8,10 @@ class CacheObliviousMatrix(Matrix):
         self.array = self.new_matrix
 
     def transpose_piece(self, i, j, w, h):
-        if w == 1 and h == 1:
-            self.new_matrix[j][i] = self.array[i][j]
+        if w <= 75 and h <= 75:
+            for x in range(i, i + h):
+                for y in range(j, j + w):
+                    self.new_matrix[y][x] = self.array[x][y]
             return
         if w >= h:
             whalf = w // 2
